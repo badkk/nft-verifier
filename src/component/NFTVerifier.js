@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Layout, Image, Statistic } from 'antd';
 import GoogleMapReact from 'google-map-react';
 import * as styles from './nftverifier.module.css';
@@ -15,9 +15,13 @@ function parseObj(o) {
     return JSON.parse(JSON.stringify(o));
 }
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 function NFTVerifier() {
     const [crustReps, setCrustReps] = useState(0); 
-    const {cid} = useParams();
+    const cid = useQuery().get('cid');
 
     useEffect(() => { 
         async function getCrustReps() {
@@ -66,6 +70,7 @@ function NFTVerifier() {
         )
     }
     return (
+        cid ?
         <Layout className='layout'>
             <Header className={styles.header}>
                 📦 NFT Verifier
@@ -94,6 +99,8 @@ function NFTVerifier() {
                 NFT Verifier ©2021 Created by Crust Network
             </Footer>
         </Layout>
+        :
+        <>Please provide your NFT metadatas</>
     )
 }
  
